@@ -1,0 +1,230 @@
+<!-- <!DOCTYPE html>
+<html>
+  <head>
+    <title>Finology Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <h2>Finology Price Chart (Open vs Close)</h2>
+    <input type="search " placeholder="Search" id="search" />
+    <button type="button" id="search-btn">Search</button>
+    <canvas id="btcChart" width="900" height="400"></canvas>
+
+    <script>
+      let data = null;
+      let chartInstance = null;
+      const finology = document.getElementById("search");
+      const searchBtn = document.getElementById("search-btn");
+
+      searchBtn.addEventListener("click", async function (e) {
+        e.preventDefault();
+        const search = finology.value;
+        try {
+          const response = await fetch(
+            `http://127.0.0.1:5000/chart?ticker=${encodeURIComponent(search)}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const text = await response.text();
+          data = JSON.parse(text); // assuming the text is JSON, you can adjust this if it's plain text
+          console.log("Received chart data:", data);
+
+          // Now render chart dynamically after data is loaded
+          const ctx = document.getElementById("btcChart").getContext("2d");
+          console.log("ctx", ctx);
+
+          if (chartInstance !== null) {
+            chartInstance.destroy();
+          }
+          chartInstance = new Chart(ctx, {
+            type: "line",
+            data: {
+              labels: data.labels,
+              datasets: [
+                {
+                  label: "Open",
+                  data: data.open,
+                  borderColor: "blue",
+                  fill: false,
+                },
+                {
+                  label: "Close",
+                  data: data.close,
+                  borderColor: "green",
+                  fill: false,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              scales: {
+                x: {
+                  ticks: {
+                    maxTicksLimit: 10,
+                  },
+                },
+                y: {
+                  beginAtZero: false,
+                },
+              },
+            },
+          });
+        } catch (error) {
+          console.error("Error fetching chart data:", error);
+        }
+      });
+    </script>
+  </body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Finology Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 40px;
+      }
+
+      h2 {
+        color: #333;
+        margin-bottom: 20px;
+      }
+      #search-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      #search {
+        padding: 8px 12px;
+        font-size: 16px;
+        width: 200px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      #chart-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        padding: 20px;
+      }
+      #search-btn {
+        padding: 8px 16px;
+        font-size: 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        margin-left: 10px;
+        cursor: pointer;
+      }
+
+      #search-btn:hover {
+        background-color: #0056b3;
+      }
+
+      #btcChart {
+        margin-top: 30px;
+        background-color: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Finology Price Chart (Open vs Close)</h2>
+    <div id="chart-container">
+      <div id="search-container">
+        <input
+          type="search"
+          placeholder="Search ticker symbol..."
+          id="search"
+        />
+        <button type="button" id="search-btn">Search</button>
+      </div>
+      <canvas id="btcChart" width="900" height="400"></canvas>
+    </div>
+
+    <!-- Chart.js script remains unchanged -->
+    <script>
+      let data = null;
+      let chartInstance = null;
+      const finology = document.getElementById("search");
+      const searchBtn = document.getElementById("search-btn");
+
+      searchBtn.addEventListener("click", async function (e) {
+        e.preventDefault();
+        const search = finology.value;
+        try {
+          const response = await fetch(
+            `http://127.0.0.1:5000/chart?ticker=${encodeURIComponent(search)}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const text = await response.text();
+          data = JSON.parse(text);
+          console.log("Received chart data:", data);
+
+          const ctx = document.getElementById("btcChart").getContext("2d");
+
+          if (chartInstance !== null) {
+            chartInstance.destroy();
+          }
+          chartInstance = new Chart(ctx, {
+            type: "line",
+            data: {
+              labels: data.labels,
+              datasets: [
+                {
+                  label: "Open",
+                  data: data.open,
+                  borderColor: "blue",
+                  fill: false,
+                },
+                {
+                  label: "Close",
+                  data: data.close,
+                  borderColor: "green",
+                  fill: false,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              scales: {
+                x: {
+                  ticks: {
+                    maxTicksLimit: 10,
+                  },
+                },
+                y: {
+                  beginAtZero: false,
+                },
+              },
+            },
+          });
+        } catch (error) {
+          console.error("Error fetching chart data:", error);
+        }
+      });
+    </script>
+  </body>
+</html>
